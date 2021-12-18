@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Abstract
+namespace Business.Abstract
 {
-   public interface IBrandDal:IEntityRepository<Brand>
+   public interface IBrandService
     {
-      
+        List<Brand> GetAll();
     }
 }
