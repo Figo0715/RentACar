@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,10 @@ namespace Business.Concrete
 {
     public class RentalManager : IRentalService
     {
+        IRentalDal _rentalDal;
         public List<Rental> GetAll()
         {
-            throw new NotImplementedException();
+            return _rentalDal.GetAll();
         }
     }
 }

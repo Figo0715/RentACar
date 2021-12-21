@@ -1,5 +1,7 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess.EntityFramework;
+using DataAccess.Abstract;
 using Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,31 +11,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCarImageDal : ICarImageDal
+    public class EfCarImageDal : EfEntityRepositoryBase<CarImage, RentACarContext>, ICarImageDal
     {
-        public void Add(CarImage entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(CarImage entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public CarImage Get(Expression<Func<CarImage, bool>> filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<CarImage> GetAll(Expression<Func<CarImage, bool>> filter = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(CarImage entity)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

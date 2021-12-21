@@ -1,5 +1,7 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess.EntityFramework;
+using DataAccess.Abstract;
 using Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,31 +11,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfRentalDal : IRentalDal
+    public class EfRentalDal : EfEntityRepositoryBase<Rental, RentACarContext>, IRentalDal
     {
-        public void Add(Rental entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Rental entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Rental Get(Expression<Func<Rental, bool>> filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Rental> GetAll(Expression<Func<Rental, bool>> filter = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Rental entity)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

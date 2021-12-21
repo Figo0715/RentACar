@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,16 @@ namespace Business.Concrete
 {
     public class CustomerCreditCardManager : ICustomerCreditCardService
     {
+        ICustomerCreditCardDal _customerCreditCardDal;
+
+        public CustomerCreditCardManager(ICustomerCreditCardDal customerCreditCardDal)
+        {
+            _customerCreditCardDal = customerCreditCardDal;
+        }
+
         public List<CustomerCreditCard> GetAll()
         {
-            throw new NotImplementedException();
+            return _customerCreditCardDal.GetAll();
         }
     }
 }

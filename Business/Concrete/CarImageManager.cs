@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,16 @@ namespace Business.Concrete
 {
     public class CarImageManager : ICarImageService
     {
+        ICarImageDal _carImageDal;
+
+        public CarImageManager(ICarImageDal carImageDal)
+        {
+            _carImageDal = carImageDal;
+        }
+
         public List<CarImage> GetAll()
         {
-            throw new NotImplementedException();
+            return _carImageDal.GetAll();
         }
     }
 }
