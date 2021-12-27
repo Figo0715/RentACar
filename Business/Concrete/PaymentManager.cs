@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -18,9 +20,21 @@ namespace Business.Concrete
             _paymentDal = paymentDal;
         }
 
+        public IResult Add(Payment payment)
+        {
+           
+            _paymentDal.Add(payment);
+            return new SuccessResult(Messages.PaymentAdded);
+        }
+
         public List<Payment> GetAll()
         {
             return _paymentDal.GetAll();
+        }
+
+        public Payment GetById(int id)
+        {
+            return _paymentDal.Get(p => p.Id == id);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -18,9 +20,21 @@ namespace Business.Concrete
             _customerCreditCardDal = customerCreditCardDal;
         }
 
+        public IResult Add(CustomerCreditCard customerCreditCard)
+        {
+          
+            _customerCreditCardDal.Add(customerCreditCard);
+            return new SuccessResult(Messages.CustomerCreditCardAdded);
+        }
+
         public List<CustomerCreditCard> GetAll()
         {
             return _customerCreditCardDal.GetAll();
+        }
+
+        public CustomerCreditCard GetById(int id)
+        {
+            return _customerCreditCardDal.Get(ccc=> ccc.Id == id);
         }
     }
 }
