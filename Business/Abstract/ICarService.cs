@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-   public interface ICarService
+    public interface ICarService
     {
-        List<Car> GetAll();
-        List<Car> GetAllByBranId(int id);
-        List<Car> GetByDailyPrice(decimal min, decimal max);
-        List<CarDetailDto> GetCarDetails();
-        Car GetById(int id);
+        IDataResult<List<Car>> GetAll();
+        IDataResult<List<Car>> GetAllByBranId(int id);
+        IDataResult<List<Car>> GetByDailyPrice(decimal min, decimal max);
+        IDataResult<List<CarDetailDto>> GetCarDetails();
+        IDataResult<Car> GetById(int id);
         IResult Add(Car car);
     }
 }
