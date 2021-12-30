@@ -10,8 +10,8 @@ namespace Business.Abstract
 {
     public interface ICustomerCreditCardService
     {
-        List<CustomerCreditCard> GetAll();
-        CustomerCreditCard GetById(int id);
+        IDataResult<List<CustomerCreditCard>> GetAll();
+        IDataResult<CustomerCreditCard> GetById(int id);
         IResult Add(CustomerCreditCard customerCreditCard);
     }
 }

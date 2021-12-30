@@ -10,8 +10,8 @@ namespace Business.Abstract
 {
    public interface IPaymentService
     {
-        List<Payment> GetAll();
-        Payment GetById(int id);
+        IDataResult<List<Payment>> GetAll(); 
+        IDataResult<Payment> GetById(int id);
         IResult Add(Payment payment);
     }
 }

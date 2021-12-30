@@ -31,14 +31,14 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarImageAdded);
         }
 
-        public List<CarImage> GetAll()
+        public IDataResult<List<CarImage>> GetAll()
         {
-            return _carImageDal.GetAll();
+            return new SuccessDataResult<List<CarImage>> (_carImageDal.GetAll());
         }
 
-        public CarImage GetById(int id)
+        public IDataResult<CarImage> GetById(int id)
         {
-            return _carImageDal.Get(ci => ci.Id == id);
+            return new SuccessDataResult<CarImage>(_carImageDal.Get(ci => ci.Id == id));
         }
     }
 }

@@ -30,14 +30,14 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CustomerAdded);
         }
 
-        public List<Customer> GetAll()
+        public IDataResult<List<Customer>> GetAll()
         {
-            return _customerDal.GetAll();
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll());
         }
 
-        public Customer GetById(int id)
+        public IDataResult<Customer> GetById(int id)
         {
-            return _customerDal.Get(cu => cu.Id == id);
+            return new SuccessDataResult<Customer>(_customerDal.Get(cu => cu.Id == id));
         }
     }
 }

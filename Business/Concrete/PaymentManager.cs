@@ -27,14 +27,14 @@ namespace Business.Concrete
             return new SuccessResult(Messages.PaymentAdded);
         }
 
-        public List<Payment> GetAll()
+        public IDataResult<List<Payment>> GetAll()
         {
-            return _paymentDal.GetAll();
+            return new SuccessDataResult<List<Payment>>(_paymentDal.GetAll());
         }
 
-        public Payment GetById(int id)
+        public IDataResult<Payment> GetById(int id)
         {
-            return _paymentDal.Get(p => p.Id == id);
+            return new SuccessDataResult<Payment>(_paymentDal.Get(p => p.Id == id));
         }
     }
 }

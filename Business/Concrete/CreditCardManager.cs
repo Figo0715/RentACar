@@ -30,14 +30,14 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CreditCardAdded);
         }
 
-        public List<CreditCard> GetAll()
+        public IDataResult<List<CreditCard>> GetAll()
         {
-            return _creditCardDal.GetAll();
+            return new SuccessDataResult<List<CreditCard>>(_creditCardDal.GetAll());
         }
 
-        public CreditCard GetById(int id)
+        public IDataResult<CreditCard> GetById(int id)
         {
-            return _creditCardDal.Get(cc => cc.Id == id);
+            return new SuccessDataResult<CreditCard>(_creditCardDal.Get(cc => cc.Id == id));
         }
     }
 }

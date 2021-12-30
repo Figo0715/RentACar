@@ -10,8 +10,8 @@ namespace Business.Abstract
 {
    public interface IRentalService
     {
-        List<Rental> GetAll();
-        Rental GetById(int id);
+        IDataResult<List<Rental>> GetAll(); 
+        IDataResult<Rental> GetById(int id);
         IResult Add(Rental rental);
     }
 }

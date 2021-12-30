@@ -22,14 +22,14 @@ namespace Business.Concrete
             return new SuccessResult(Messages.RentalAdded);
         }
 
-        public List<Rental> GetAll()
+        public IDataResult<List<Rental>> GetAll()
         {
-            return _rentalDal.GetAll();
+            return new SuccessDataResult<List<Rental>> (_rentalDal.GetAll());
         }
 
-        public Rental GetById(int id)
+        public IDataResult<Rental> GetById(int id)
         {
-            return _rentalDal.Get(r => r.Id == id);
+            return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.Id == id));
         }
     }
 }

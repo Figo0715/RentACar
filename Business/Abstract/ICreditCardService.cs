@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-   public interface ICreditCardService
+    public interface ICreditCardService
     {
-        List<CreditCard> GetAll();
-        CreditCard GetById(int id);
+        IDataResult<List<CreditCard>> GetAll();
+        IDataResult<CreditCard> GetById(int id);
         IResult Add(CreditCard creditCard);
     }
 }
