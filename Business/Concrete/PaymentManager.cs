@@ -24,7 +24,7 @@ namespace Business.Concrete
         {
            
             _paymentDal.Add(payment);
-            return new SuccessResult(Messages.PaymentAdded);
+            return new SuccessResult(Messages.PaymentSuccessful);
         }
 
         public IDataResult<List<Payment>> GetAll()
@@ -35,6 +35,11 @@ namespace Business.Concrete
         public IDataResult<Payment> GetById(int id)
         {
             return new SuccessDataResult<Payment>(_paymentDal.Get(p => p.Id == id));
+        }
+
+        public IDataResult<int> Pay(CreditCard creditCard, int customerId, decimal amount)
+        {
+            throw new NotImplementedException();
         }
     }
 }

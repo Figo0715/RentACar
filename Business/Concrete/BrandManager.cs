@@ -22,12 +22,14 @@ namespace Business.Concrete
 
         public IResult Add(Brand brand)
         {
-            if (brand.Name.Length < 2)
-            {
-                return new ErrorResult(Messages.BrandNameInvalid);
-            }
+           
             _brandDal.Add(brand);
             return new SuccessResult(Messages.BrandAdded);
+        }
+
+        public IResult Delete(Brand brand)
+        {
+            throw new NotImplementedException();
         }
 
         public IDataResult<List<Brand>> GetAll()
@@ -35,9 +37,19 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());
         }
 
-        public IDataResult<Brand> GetById(int id)
+        public IDataResult<Brand> GetBrandById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDataResult<Brand> GetByBrandId(int id)
         {
             return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == id));
+        }
+
+        public IResult Update(Brand brand)
+        {
+            throw new NotImplementedException();
         }
     }
 }

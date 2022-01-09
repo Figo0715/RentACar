@@ -23,12 +23,14 @@ namespace Business.Concrete
         public IResult Add(Color color)
         {
 
-            if (color.Name.Length < 2)
-            {
-                return new ErrorResult(Messages.ColorNameInvalid);
-            }
+           
             _colorDal.Add(color);
             return new SuccessResult(Messages.ColorAdded);
+        }
+
+        public IResult Delete(Color color)
+        {
+            throw new NotImplementedException();
         }
 
         public IDataResult<List<Color>> GetAll()
@@ -39,6 +41,16 @@ namespace Business.Concrete
         public IDataResult<Color> GetById(int id)
         {
             return new SuccessDataResult<Color>(_colorDal.Get(cl => cl.Id == id));
+        }
+
+        public IDataResult<Color> GetColorById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IResult Update(Color color)
+        {
+            throw new NotImplementedException();
         }
     }
 }

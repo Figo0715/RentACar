@@ -11,6 +11,6 @@ namespace DataAccess.Abstract
 {
    public interface ICustomerDal:IEntityRepository<Customer>
     {
-       // List<CustomerDetailDto> GetCustomersDetail();
+        //List<CustomerDetailDto> GetCustomersDetail();
     }
 }

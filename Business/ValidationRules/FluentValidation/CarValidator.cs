@@ -12,17 +12,37 @@ namespace Business.ValidationRules.FluentValidation
     {
         public CarValidator()
         {
-            RuleFor(c => c.ModelName).NotEmpty();
-            RuleFor(c => c.ModelName).MinimumLength(2);
-            RuleFor(c => c.ModelYear).NotEmpty();
+            RuleFor(c => c.BrandId).NotEmpty();
+            RuleFor(c => c.BrandId).NotNull();
+            RuleFor(c => c.BrandId).GreaterThan(0);
+
+            RuleFor(c => c.ColorId).NotEmpty();
+            RuleFor(c => c.ColorId).NotNull();
+            RuleFor(c => c.ColorId).GreaterThan(0);
+
+            RuleFor(c => c.DailyPrice).NotEmpty();
+            RuleFor(c => c.DailyPrice).NotNull();
             RuleFor(c => c.DailyPrice).GreaterThan(0);
-            RuleFor(c => c.DailyPrice).GreaterThanOrEqualTo(100).When(c => c.BrandId == 1);
-            RuleFor(c => c.ModelName).Must(StartWithA).WithMessage("Araç Model İsimleri A harfi ile başlamalıdır");
+
+            RuleFor(c => c.ModelYear).NotEmpty();
+            RuleFor(c => c.ModelYear).NotNull();
+
+            RuleFor(c => c.ModelName).NotEmpty();
+            RuleFor(c => c.ModelName).NotNull();
+            RuleFor(c => c.ModelName).MinimumLength(1);
+            RuleFor(c => c.ModelName).MaximumLength(50);
+
+            RuleFor(c => c.Description).NotEmpty();
+            RuleFor(c => c.Description).NotNull();
+            RuleFor(c => c.Description).MinimumLength(2);
+            RuleFor(c => c.Description).MaximumLength(50);
+
+            //RuleFor(c => c.ModelName).Must(StartWithA).WithMessage("Araç Model İsimleri A harfi ile başlamalıdır");
         }
 
-        private bool StartWithA(string arg)
-        {
-            return arg.StartsWith("A");
-        }
+        //private bool StartWithA(string arg)
+        //{
+        //    return arg.StartsWith("A");
+        //}
     }
 }

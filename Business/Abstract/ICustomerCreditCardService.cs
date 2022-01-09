@@ -1,5 +1,6 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,8 @@ namespace Business.Abstract
 {
     public interface ICustomerCreditCardService
     {
-        IDataResult<List<CustomerCreditCard>> GetAll();
-        IDataResult<CustomerCreditCard> GetById(int id);
-        IResult Add(CustomerCreditCard customerCreditCard);
+        IDataResult<List<CreditCard>> GetSavedCreditCardsByCustomerId(int customerId);
+        IResult SaveCustomerCreditCard(CustomerCreditCardModel customerCreditCardModel);
+        IResult DeleteCustomerCreditCard(CustomerCreditCardModel customerCreditCardModel);
     }
 }

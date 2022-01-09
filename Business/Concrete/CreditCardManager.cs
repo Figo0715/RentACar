@@ -22,12 +22,17 @@ namespace Business.Concrete
 
         public IResult Add(CreditCard creditCard)
         {
-            if (creditCard.CardHolderFullName.Length < 2)
-            {
-                return new ErrorResult(Messages.CreditCardHolderFullNameInvalid);
-            }
+            //if (creditCard.CardHolderFullName.Length < 2)
+            //{
+            //    return new ErrorResult(Messages.CreditCardHolderFullNameInvalid);
+            //}
             _creditCardDal.Add(creditCard);
-            return new SuccessResult(Messages.CreditCardAdded);
+            return new SuccessResult(Messages.CustomerCreditCardSaved);
+        }
+
+        public IDataResult<CreditCard> Get(string cardNumber, string expireYear, string expireMonth, string cvc, string cardHolderFullName)
+        {
+            throw new NotImplementedException();
         }
 
         public IDataResult<List<CreditCard>> GetAll()
@@ -38,6 +43,16 @@ namespace Business.Concrete
         public IDataResult<CreditCard> GetById(int id)
         {
             return new SuccessDataResult<CreditCard>(_creditCardDal.Get(cc => cc.Id == id));
+        }
+
+        public IResult Update(CreditCard creditCard)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IResult Validate(CreditCard creditCard)
+        {
+            throw new NotImplementedException();
         }
     }
 }

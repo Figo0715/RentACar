@@ -3,6 +3,7 @@ using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,12 @@ namespace Business.Concrete
         {
           
             _customerCreditCardDal.Add(customerCreditCard);
-            return new SuccessResult(Messages.CustomerCreditCardAdded);
+            return new SuccessResult(Messages.CustomerCreditCardSaved);
+        }
+
+        public IResult DeleteCustomerCreditCard(CustomerCreditCardModel customerCreditCardModel)
+        {
+            throw new NotImplementedException();
         }
 
         public IDataResult<List<CustomerCreditCard>> GetAll()
@@ -35,6 +41,16 @@ namespace Business.Concrete
         public IDataResult<CustomerCreditCard> GetById(int id)
         {
             return new SuccessDataResult<CustomerCreditCard> (_customerCreditCardDal.Get(ccc=> ccc.Id == id));
+        }
+
+        public IDataResult<List<CreditCard>> GetSavedCreditCardsByCustomerId(int customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IResult SaveCustomerCreditCard(CustomerCreditCardModel customerCreditCardModel)
+        {
+            throw new NotImplementedException();
         }
     }
 }

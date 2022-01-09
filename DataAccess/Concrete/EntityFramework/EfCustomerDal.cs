@@ -19,8 +19,8 @@ namespace DataAccess.Concrete.EntityFramework
         //    using (RentACarContext context = new RentACarContext())
         //    {
         //        var result = from c in context.Customers
-        //                     join u in context.Users
-        //                         on c.UserId equals u.Id
+        //                     //join u in context.Users
+        //                     //    on c.UserId equals u.Id
         //                     select new CustomerDetailDto
         //                     {
         //                         Id = c.Id,
