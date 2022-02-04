@@ -31,7 +31,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  BrandName = b.Name,
                                  ColorId = c.ColorId,
                                  ColorName = co.Name,
-                                 MinFindexScore = c.MinFindexScore,
+                                 //MinFindexScore = c.MinFindexScore,
                                  ModelName = c.ModelName,
                                  DailyPrice = c.DailyPrice,
                                  Description = c.Description,

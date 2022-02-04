@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
+using Business.BussinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Bussiness;
@@ -19,27 +21,34 @@ namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
-        ICarDal _carDal;
-        IBrandService _brandService;
-        public CarManager(ICarDal carDal,IBrandService brandService)
+        private readonly ICarDal _carDal;
+        private readonly ICarImageService _carImageService;
+
+        public CarManager(ICarDal carDal, ICarImageService carImageService)
         {
             _carDal = carDal;
-            _brandService = brandService;
+            _carImageService = carImageService;
         }
 
-        //Claim
+        //[SecuredOperation("admin,car.all,car.list")]
+        [CacheAspect(10)]
+        public IDataResult<Car> GetById(int id)
+        {
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == id), Messages.CarListed);
+        }
 
-        //[SecuredOpertion("admin,car.add")]
+        //[SecuredOperation("admin,car.all,car.list")]
+        [CacheAspect(10)]
+        public IDataResult<List<Car>> GetAll()
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
+        }
+
+        [SecuredOperation("admin,car.all,car.add")]
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IDataResult<int> Add(Car car)
         {
-            //İş kuralı kullanımı
-            /* IResult result= BussinessRules.Run(CheckIfCarCountOfBrand(car.BrandId),(CheckIfCarNameExists(car.ModelName),CheckIfCategoryLimitExceded()));*/
-            //if (result!=null)
-            //{
-            //    return result;
-            //}
-
             _carDal.Add(car);
             var result = _carDal.Get(c =>
                 c.ModelName == car.ModelName &&
@@ -55,116 +64,95 @@ namespace Business.Concrete
             return new ErrorDataResult<int>(-1, "Araç eklenirken bir sorun oldu");
         }
 
-        public IResult Delete(Car car)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDataResult<List<Car>> GetAll()
-        {
-            //if (DateTime.Now.Hour == 22)
-            //{
-            //    return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
-            //}
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
-        }
-
-        public IDataResult<List<Car>> GetAllByBranId(int id)
-        {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id));
-        }
-
-        public IDataResult<List<Car>> GetByDailyPrice(decimal min, decimal max)
-        {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.DailyPrice >= min && c.DailyPrice <= max));
-        }
-
-        public IDataResult<Car> GetById(int id)
-        {
-            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == id));
-        }
-
-        public IDataResult<List<CarDetailDto>> GetCarDetails()
-        {
-            //if (DateTime.Now.Hour == 02)
-            //{
-            //    return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
-            //}
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
-        }
-
-        public IDataResult<CarDetailDto> GetCarDetails(int carId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDataResult<List<Car>> GetCarsByBrandId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDataResult<List<CarDetailDto>> GetCarsByBrandIdWithDetails(int brandId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDataResult<List<Car>> GetCarsByColorId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDataResult<List<CarDetailDto>> GetCarsByColorIdWithDetails(int colorId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDataResult<List<CarDetailDto>> GetCarsByFilterWithDetails(int brandId, int colorId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDataResult<List<CarDetailDto>> GetCarsWithDetails()
-        {
-            throw new NotImplementedException();
-        }
-
+        [SecuredOperation("admin,car.all,car.update")]
+        [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
-            throw new NotImplementedException();
+            var rulesResult = BussinessRules.Run(CheckIfCarIdExist(car.Id));
+            if (rulesResult != null)
+            {
+                return rulesResult;
+            }
+            _carDal.Update(car);
+            return new SuccessResult(Messages.CarUpdated);
         }
 
-        ////İş kuralı (Model sayısı 15 e eşit veya büyükse bu modele araç kaydı yapma)
-        //private IResult CheckIfCarCountOfBrand(int brandId)
-        //{
-        //    var result = _carDal.GetAll(c => c.BrandId == brandId).Count();
-        //    if (result >= 15)
-        //    {
-        //        return new ErrorResult(Messages.CarCountOfBrandError);
-        //    }
-        //    return new SuccessResult();
-        //}
+        [SecuredOperation("admin,car.all,car.delete")]
+        [CacheRemoveAspect("ICarService.Get")]
+        public IResult Delete(Car car)
+        {
+            var rulesResult = BussinessRules.Run(CheckIfCarIdExist(car.Id));
+            if (rulesResult != null)
+            {
+                return rulesResult;
+            }
 
-        ////İş kuralı (Aynı isimde araç kaydı yapma)
-        //private IResult CheckIfCarNameExists(string carName)
-        //{
-        //    var result = _carDal.GetAll(c => c.ModelName == carName).Any();
-        //    if (result)
-        //    {
-        //        return new ErrorResult(Messages.CarNameAlreadyExists);
-        //    }
-        //    return new SuccessResult();
-        //}
+            var deletedCar = _carDal.Get(c => c.Id == car.Id);
+            _carImageService.DeleteAllImagesOfCarByCarId(deletedCar.Id);
+            _carDal.Delete(deletedCar);
+            return new SuccessResult(Messages.CarDeleted);
+        }
 
-        //Eğer mevcut brand sayısı 15 i geçtiyse sisteme yeni araç eklenemez.
-        //private IResult CheckIfCategoryLimitExceded()
-        //{
-        //    var result = _brandService.GetAll();
-        //    if (result.Data.Count>15)
-        //    {
-        //        return new ErrorResult(Messages.CheckIfCategoryLimitExceded);
-        //    }
-        //    return new SuccessResult();
-        //}
+       // [SecuredOperation("admin,car.all,car.list")]
+        [CacheAspect(10)]
+        public IDataResult<List<Car>> GetCarsByBrandId(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id), Messages.CarsListed);
+        }
 
+        [SecuredOperation("admin,car.all,car.list")]
+        [CacheAspect(10)]
+        public IDataResult<List<Car>> GetCarsByColorId(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id), Messages.CarsListed);
+        }
+
+        //[SecuredOperation("admin,car.all,car.list")]
+        [CacheAspect(10)]
+        public IDataResult<List<CarDetailDto>> GetCarsWithDetails()
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.CarsListed);
+        }
+
+        //[SecuredOperation("admin,car.all,car.list")]
+        [CacheAspect(10)]
+        public IDataResult<CarDetailDto> GetCarDetails(int carId)
+        {
+            return new SuccessDataResult<CarDetailDto>(_carDal.GetCarDetails(c => c.Id == carId).SingleOrDefault(), Messages.CarListed);
+        }
+
+        //[SecuredOperation("admin,car.all,car.list")]
+        [CacheAspect(10)]
+        public IDataResult<List<CarDetailDto>> GetCarsByBrandIdWithDetails(int brandId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.BrandId == brandId), Messages.CarsListed);
+        }
+
+        //[SecuredOperation("admin,car.all,car.list")]
+        [CacheAspect(10)]
+        public IDataResult<List<CarDetailDto>> GetCarsByColorIdWithDetails(int colorId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.ColorId == colorId), Messages.CarsListed);
+        }
+
+        //[SecuredOperation("admin,car.all,car.list")]
+        [CacheAspect(10)]
+        public IDataResult<List<CarDetailDto>> GetCarsByFilterWithDetails(int brandId, int colorId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.BrandId == brandId && c.ColorId == colorId), Messages.CarsListed);
+        }
+
+        //Business Rules
+
+        private IResult CheckIfCarIdExist(int carId)
+        {
+            var result = _carDal.GetAll(c => c.Id == carId).Any();
+            if (!result)
+            {
+                return new ErrorResult(Messages.CarNotExist);
+            }
+            return new SuccessResult();
+        }
     }
 }
